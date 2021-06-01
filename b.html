@@ -1,0 +1,17 @@
+<script> 
+window.addEventListener('message', function(e) { 
+    console.log(e)
+    if(e.source != window.parent) { 
+        return; 
+    } 
+    let data = e.data;
+    console.log('listener:', data); 
+	let result = eval(data.eval);
+ 
+	let msg = {
+		 callback:e.data.callback,
+	     param:result
+	} 
+    parent.postMessage(msg, '*'); 
+})
+</script>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>a.html</title>
+</head>
+<body>
+    <iframe src="file:///C:/Users/Endless/Desktop/b.html" style='display: none;'></iframe>
+    <script>
+    window.onload = function() { 
+      //想要操作当前iframe的时候，就像该ifranme中postMessage()一个东西。
+	   /**
+	   *定义回调函数列表
+	   */
+	    let callbacks = {
+			callback1:function(param){
+				console.log('callback1: '+param)
+			}
+		}
+	  /**
+	   *定义消息内容 
+	   * eval 的值为 要在接收方窗口执行的代码
+	   * callback 值为 接收方执行完发送的函数后 要回调的函数名
+	   */
+	    let msg = {
+			msg:'1',
+			eval:`console.log('eval listener');results = 'asdfghj'`,
+	        callback:'callback1'
+	    }
+        window.frames[0].postMessage(msg, '*'); 
+		
+		window.addEventListener('message', function(e) {
+         console.log('a listener:', e.data);   
+		 // 根据收到的回调函数名 获取已经定义的回调函数
+		 let callback = callbacks[e.data.callback];
+		 if(callback){
+		   //执行回调函数
+		   callback.call(callback,[e.data.param])
+		 }
+		 
+		// window.frames[0].postMessage(msg, '*');
+        });
+    } 
+      //当我监听到message事件的时候，我就知道有人向我发送数据了，我获得了数据就可以做对应的事情。内部对消息做实现
+    
+    </script>
+</body>
+</html>
